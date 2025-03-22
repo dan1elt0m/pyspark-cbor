@@ -9,11 +9,6 @@ def schema():
     return StructType([StructField("field", StringType(), True)])
 
 
-@pytest.fixture
-def schema():
-    return StructType([StructField("field", StringType(), True)])
-
-
 def test_read_from_s3(schema):
     with patch("boto3.client") as mock_boto3_client:
         mock_s3 = MagicMock()

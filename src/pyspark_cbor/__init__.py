@@ -124,8 +124,9 @@ class CBORDataSourceReader(DataSourceReader):
         ]
 
     def read(self, partition: CBORInputPartition) -> Iterator[Tuple]:
+        # Import here to serialize the modules into the workers
         import cbor2
-        from pyspark_cbor.parsers import _parse_array, _parse_record
+        from pyspark_cbor.parsers import _parse_array, _parse_record # noqa: F401
 
         file_name = partition.file_name
         logging.debug(f"Reading file: {file_name}")

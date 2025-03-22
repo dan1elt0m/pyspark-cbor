@@ -1,6 +1,6 @@
 """Parsers for converting Python types from CBOR into PyArrow supported datatypes"""
 
-from typing import Union, Optional, List, Dict, Type, Any
+from typing import Union, Optional, List, Dict,  Any
 
 from _cbor2 import CBORSimpleValue, undefined, CBORTag
 from pyspark.sql.types import (
@@ -11,7 +11,6 @@ from pyspark.sql.types import (
     ArrayType,
     DataType,
     StructType,
-    ByteType,
     StringType,
     BooleanType,
     DoubleType,
@@ -58,7 +57,7 @@ def _infer_schema(data: Dict[str, Any]) -> StructType:
 def _parse_field(data_type: DataType, value):
     if isinstance(value, CBORSimpleValue):
         value = value.value
-    if isinstance(value, dict) and not data_type.typeName() in ["map", "struct"]:
+    if isinstance(value, dict) and data_type.typeName() not in ["map", "struct"]:
         schema = _infer_schema(value)
         return _parse_record(schema, value)
     if isinstance(data_type, ArrayType):
@@ -107,7 +106,7 @@ def _parse_array(data_type: DataType, value: List) -> List:
     if not value:
         return values
     for i in value:
-        if isinstance(i, dict) and not data_type.typeName() in ["map", "struct"]:
+        if isinstance(i, dict) and data_type.typeName() not in ["map", "struct"]:
             # This is a item that either needs unnesting or is a record itself.
             for key in i.keys():
                 if isinstance(key, CBORSimpleValue):

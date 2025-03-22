@@ -999,8 +999,6 @@ gcp = [
 test = [
     { name = "pyspark", extra = ["connect"] },
     { name = "pytest" },
-]
-tst = [
     { name = "pytest-coverage" },
 ]
 
@@ -1018,8 +1016,8 @@ gcp = [{ name = "google-cloud-storage", specifier = ">=3.1.0" }]
 test = [
     { name = "pyspark", extras = ["connect"], specifier = "==4.0.0.dev2" },
     { name = "pytest", specifier = ">=8.3.5" },
+    { name = "pytest-coverage", specifier = ">=0.0" },
 ]
-tst = [{ name = "pytest-coverage", specifier = ">=0.0" }]
 
 [[package]]
 name = "pytest"
