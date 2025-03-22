@@ -13,7 +13,7 @@ For an in-depth understanding of the API, please refer to the [API source code](
 
 ### Installation
 ```bash
-pip install pyspark-cbor==0.1.0
+pip install pyspark-cbor
 ```
 
 ### Example
@@ -84,5 +84,9 @@ Integers will be set to null if they exceed the maximum value of the correspondi
 - Add more examples
 - Add more documentation
 - Add more error handling
+- Support string ddl schema specification
 - Add more logging
 - Add more performance optimizations: e.g., can file splitting be done?
+
+### Contributing
+Feel free to contribute to this project. As you can see there is still a lot of work to be done.
