@@ -1,5 +1,4 @@
 import base64
-import logging
 import os
 from dataclasses import dataclass
 from urllib.parse import urlparse
@@ -7,8 +6,6 @@ from urllib.parse import urlparse
 from pyspark.sql.datasource import InputPartition, DataSource, DataSourceReader
 from pyspark.sql.types import StructType
 from typing import Iterator, Tuple, List
-
-logging.basicConfig(level=logging.DEBUG)
 
 
 @dataclass
@@ -35,6 +32,10 @@ class CBORDataSourceReader(DataSourceReader):
         self.options = options
 
     def partitions(self) -> List[CBORInputPartition]:
+        """This method returns a list of InputPartition objects.
+
+        Each InputPartition object represents a file that can be read concurrently.
+        """
         path = self.options["path"]
 
         if path.startswith("s3://"):
@@ -124,12 +125,12 @@ class CBORDataSourceReader(DataSourceReader):
         ]
 
     def read(self, partition: CBORInputPartition) -> Iterator[Tuple]:
+        """This method reads the data from the given InputPartition."""
         # Import here to serialize the modules into the workers
         import cbor2
-        from pyspark_cbor.parsers import _parse_array, _parse_record # noqa: F401
+        from pyspark_cbor.parsers import _parse_array, _parse_record  # noqa: F401
 
         file_name = partition.file_name
-        logging.debug(f"Reading file: {file_name}")
 
         if file_name.startswith("s3://"):
             import boto3
@@ -167,17 +168,12 @@ class CBORDataSourceReader(DataSourceReader):
             with open(file_name, "rb") as file:
                 file_content = file.read()
 
-        if not file_content:
-            logging.warning(f"File {file_name} is empty")
-
         if self.options.get("base64_encoded") or file_name.endswith(".b64"):
             file_content = base64.b64decode(file_content)
 
         data = cbor2.loads(file_content)
-        logging.debug(f"Decoded data: {data}")
 
         records = [data] if isinstance(data, dict) else data
-        logging.debug(f"Records: {records}")
 
         for record in records:
             if not isinstance(record, dict):

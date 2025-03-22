@@ -1,6 +1,6 @@
 """Parsers for converting Python types from CBOR into PyArrow supported datatypes"""
 
-from typing import Union, Optional, List, Dict, Any, Type
+from typing import Union, Optional, List, Dict, Any
 
 from _cbor2 import CBORSimpleValue, undefined, CBORTag
 from pyspark.sql.types import (

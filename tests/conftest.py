@@ -10,6 +10,7 @@ venv_python_path = os.path.join(parent_dir, ".venv/bin/python")
 
 os.environ["PYSPARK_PYTHON"] = venv_python_path
 
+
 @pytest.fixture(scope="module")
 def spark():
     spark_session = (

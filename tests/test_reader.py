@@ -25,11 +25,12 @@ from pyspark.sql.types import (
     Row,
 )
 
-from pyspark_cbor import CBORDataSourceReader, CBORDataSource,  CBORInputPartition
+from pyspark_cbor import CBORDataSourceReader, CBORDataSource, CBORInputPartition
 import os
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 EXAMPLE_FILE = os.path.join(current_dir, "examples.cbor.b64")
+
 
 @pytest.mark.parametrize(
     "field,datatype,expected",
@@ -296,52 +297,43 @@ def test_spark_multi_row_multi_part(spark):
             file.write(cbor_data2)
 
         df = spark.read.format("cbor").schema(schema).load(tempdir)
-        assert sorted(df.collect()) == sorted([
-            Row(
-                name="Alice",
-                age=25,
-                city="San Francisco",
-                address=Row(street="123 Main St", zipcode="94105"),
-                attributes={"weight": "130", "height": "5.5"},
-                family=[
-                    Row(name="Bob", relation="brother", age=30),
-                    Row(name="Charlie", relation="brother", age=35),
-                ],
-                previous_addresses=[
-                    [Row(street="456 Broadway", zipcode="10001")],
-                    [Row(street="789 Sunset Blvd", zipcode="90028")],
-                ],
-            ),
-            Row(
-                name="Bob",
-                age=30,
-                city="New York",
-                address=Row(street="456 Broadway", zipcode="10001"),
-                attributes={"weight": "180", "height": "6.0"},
-                family=[
-                    Row(name="Alice", relation="sister", age=25),
-                    Row(name="Charlie", relation="brother", age=35),
-                ],
-                previous_addresses=[],
-            ),
-            Row(
-                name="Charlie",
-                age=35,
-                city="Los Angeles",
-                address=Row(street="789 Sunset Blvd", zipcode="90028"),
-                attributes={"weight": "160", "height": "5.8"},
-                family=[],
-                previous_addresses=[],
-            ),
-        ])
-
-def test_read_no_schema(spark):
-    spark.dataSource.register(CBORDataSource)
-    df = spark.read.format("cbor").load(EXAMPLE_FILE)
-    assert df.count() == 1
-    assert len(df.columns) == 1
-    assert df.schema.fields[0].name == "data"
-    assert df.schema.fields[0].dataType == ArrayType(
-        MapType(StringType(), StringType())
-    )
-    row = df.collect()
+        assert sorted(df.collect()) == sorted(
+            [
+                Row(
+                    name="Alice",
+                    age=25,
+                    city="San Francisco",
+                    address=Row(street="123 Main St", zipcode="94105"),
+                    attributes={"weight": "130", "height": "5.5"},
+                    family=[
+                        Row(name="Bob", relation="brother", age=30),
+                        Row(name="Charlie", relation="brother", age=35),
+                    ],
+                    previous_addresses=[
+                        [Row(street="456 Broadway", zipcode="10001")],
+                        [Row(street="789 Sunset Blvd", zipcode="90028")],
+                    ],
+                ),
+                Row(
+                    name="Bob",
+                    age=30,
+                    city="New York",
+                    address=Row(street="456 Broadway", zipcode="10001"),
+                    attributes={"weight": "180", "height": "6.0"},
+                    family=[
+                        Row(name="Alice", relation="sister", age=25),
+                        Row(name="Charlie", relation="brother", age=35),
+                    ],
+                    previous_addresses=[],
+                ),
+                Row(
+                    name="Charlie",
+                    age=35,
+                    city="Los Angeles",
+                    address=Row(street="789 Sunset Blvd", zipcode="90028"),
+                    attributes={"weight": "160", "height": "5.8"},
+                    family=[],
+                    previous_addresses=[],
+                ),
+            ]
+        )

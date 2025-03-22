@@ -1,6 +1,4 @@
-from struct import Struct
-
-# pyspark--cbor
+# pyspark-cbor
 
 > By no means ready for production use. This project is still in development. See the [TODOs](#todos) section for more information.
 
@@ -68,12 +66,14 @@ However, the following happens in permissive mode:
 - If a field is undefined, it will be set to `null`
 - If a field is defined but the value is not present, it will be set to `null`.
 
- These limits are:
+Integers will be set to null if they exceed the maximum value of the corresponding Spark type:
    - IntegerType: `2147483647`
    - LongType: `9223372036854775807`
 
 - In DecimalType, the precision is limited to 38 digits. infinity and NaN are not supported and will be converted to `null`.
-- Not sure if I implemented the `CBOR TAGS` and other special types correctly. Might or might not work as expected. Let me know if you find any issues.
+- Not sure if I implemented the `CBOR TAGS` and other special types correctly. Might or might not work as expected. 
+
+- Let me know if you find any issues.
 
 ### TODOs
 - Add more tests
