@@ -25,8 +25,7 @@ from pyspark.sql.types import (
     Row,
 )
 
-from pyspark_cbor import CBORInputPartition
-from src.pyspark_cbor import CBORDataSourceReader, CBORDataSource
+from pyspark_cbor import CBORDataSourceReader, CBORDataSource,  CBORInputPartition
 
 
 @pytest.mark.parametrize(

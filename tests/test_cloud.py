@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from pyspark.sql.types import StructType, StructField, StringType
-from src.pyspark_cbor import CBORDataSourceReader
+from pyspark_cbor import CBORDataSourceReader
 
 
 @pytest.fixture
