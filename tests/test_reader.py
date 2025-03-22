@@ -334,3 +334,14 @@ def test_spark_multi_row_multi_part(spark):
                 previous_addresses=[],
             ),
         ])
+
+def test_read_no_schema(spark):
+    spark.dataSource.register(CBORDataSource)
+    df = spark.read.format("cbor").load(EXAMPLE_FILE)
+    assert df.count() == 1
+    assert len(df.columns) == 1
+    assert df.schema.fields[0].name == "data"
+    assert df.schema.fields[0].dataType == ArrayType(
+        MapType(StringType(), StringType())
+    )
+    row = df.collect()

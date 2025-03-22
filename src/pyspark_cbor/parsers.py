@@ -23,6 +23,8 @@ import math
 
 def _parse_record(schema: StructType, data: Dict) -> Row:
     # Each field is a dictionary with the field name as the key
+    if not schema:
+        schema = _infer_schema(data)
     row = {}
     for field in schema.fields:
         output = _parse_field(field.dataType, data.get(field.name))
