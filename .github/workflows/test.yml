@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        py: ['3.9', '3.10', '3.11', '3.12', '3.13' ]
+        python-version: ['3.9', '3.10', '3.11', '3.12' ]
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         run: uv python install ${{ matrix.python-version }} && uv python pin ${{ matrix.python-version }}
       - name: Install dependencies
-        run: uv venv && uv sync --all-extras
+        run: uv venv && uv sync --all-groups
       - name: Run tests
         run: |
           source .venv/bin/activate
