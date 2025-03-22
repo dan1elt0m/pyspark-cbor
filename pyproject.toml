@@ -17,6 +17,7 @@ build-backend = "hatchling.build"
 test = [
     "pytest>=8.3.5",
     "pyspark[connect]==4.0.0.dev2",
+    "pytest-coverage>=0.0",
 ]
 dev = [
     "ruff>=0.11.1",
