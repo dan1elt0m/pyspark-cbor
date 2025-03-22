@@ -991,7 +991,6 @@ azure = [
 ]
 dev = [
     { name = "ruff" },
-    { name = "venv-pack" },
 ]
 gcp = [
     { name = "google-cloud-storage" },
@@ -1008,10 +1007,7 @@ requires-dist = [{ name = "cbor2", specifier = ">=5.6.5" }]
 [package.metadata.requires-dev]
 aws = [{ name = "boto3", specifier = ">=1.37.18" }]
 azure = [{ name = "azure-storage-blob", specifier = ">=12.25.0" }]
-dev = [
-    { name = "ruff", specifier = ">=0.11.1" },
-    { name = "venv-pack", specifier = ">=0.2.0" },
-]
+dev = [{ name = "ruff", specifier = ">=0.11.1" }]
 gcp = [{ name = "google-cloud-storage", specifier = ">=3.1.0" }]
 test = [
     { name = "pyspark", extras = ["connect"], specifier = "==4.0.0.dev2" },
@@ -1250,13 +1246,4 @@ resolution-markers = [
 sdist = { url = "https://files.pythonhosted.org/packages/aa/63/e53da845320b757bf29ef6a9062f5c669fe997973f966045cb019c3f4b66/urllib3-2.3.0.tar.gz", hash = "sha256:f8c5449b3cf0861679ce7e0503c7b44b5ec981bec0d1d3795a07f1ba96f0204d", size = 307268 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c8/19/4ec628951a74043532ca2cf5d97b7b14863931476d117c471e8e2b1eb39f/urllib3-2.3.0-py3-none-any.whl", hash = "sha256:1cee9ad369867bfdbbb48b7dd50374c0967a0bb7710050facf0dd6911440e3df", size = 128369 },
-]
-
-[[package]]
-name = "venv-pack"
-version = "0.2.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/3b/fe/ccae5a4d516ee2b83ff4956bdd7f67c965553967f13d8f7cf790ee9f998a/venv-pack-0.2.0.tar.gz", hash = "sha256:33bbed48728bd5d1fee0a89c3082702b5d100c8021b2da9ea384b23ac410d3cd", size = 32186 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/bf/bd/b9da35f53a206fd36a807ff237be5a818cfbd9fb6b3b96986cb008d65445/venv_pack-0.2.0-py2.py3-none-any.whl", hash = "sha256:95c5a51b8e5576143843b7693e1ac275c627348477562669bcd250847fa08136", size = 16132 },
 ]

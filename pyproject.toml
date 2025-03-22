@@ -3,6 +3,7 @@ name = "pyspark-cbor"
 version = "0.1.0"
 description = "Reading and writing CBOR files with PySpark"
 readme = "README.md"
+authors = [{name="Daniël Tom", email="d.e.tom89@gmail.com"}]
 requires-python = ">=3.9"
 dependencies = [
     "cbor2>=5.6.5",
@@ -20,8 +21,7 @@ test = [
     "pytest-coverage>=0.0",
 ]
 dev = [
-    "ruff>=0.11.1",
-    "venv-pack>=0.2.0",
+    "ruff>=0.11.1"
 ]
 aws = [
     "boto3>=1.37.18",
