@@ -195,7 +195,7 @@ def test_spark_reader_single_row(spark, field: str, datatype: DataType, expected
             assert value == expected[i]
 
 
-def test_spark_multi_row(spark):
+def test_spark_multi_row_multi_part(spark):
     spark.dataSource.register(CBORDataSource)
     # Some example multi row relational data with complex types
     row1 = {
@@ -279,15 +279,21 @@ def test_spark_multi_row(spark):
         ]
     )
 
-    data = [row1, row2, row3]
-    cbor_data = cbor2.dumps(data)
+    data1 = [row1, row2]
+    data2 = [row3]
     with TemporaryDirectory() as tempdir:
-        tempfile = f"{tempdir}/example.cbor"
+        tempfile = f"{tempdir}/example1.cbor"
         with open(tempfile, "wb") as file:
-            file.write(cbor_data)
+            cbor_data1 = cbor2.dumps(data1)
+            file.write(cbor_data1)
 
-        df = spark.read.format("cbor").schema(schema).load(tempfile)
-        assert df.collect() == [
+        tempfile2 = f"{tempdir}/example2.cbor"
+        with open(tempfile2, "wb") as file:
+            cbor_data2 = cbor2.dumps(data2)
+            file.write(cbor_data2)
+
+        df = spark.read.format("cbor").schema(schema).load(tempdir)
+        assert sorted(df.collect()) == sorted([
             Row(
                 name="Alice",
                 age=25,
@@ -324,4 +330,4 @@ def test_spark_multi_row(spark):
                 family=[],
                 previous_addresses=[],
             ),
-        ]
+        ])
