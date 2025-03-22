@@ -12,3 +12,4 @@ spark-cbor/.venv
 # IDE files
 .idea/
 .python-version
+tests/.DS_Store
