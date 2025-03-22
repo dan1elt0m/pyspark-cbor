@@ -3,9 +3,21 @@
 from typing import Union, Optional, List, Dict, Type, Any
 
 from _cbor2 import CBORSimpleValue, undefined, CBORTag
-from pyspark.sql.types import Row, DecimalType, LongType, StructField, ArrayType, DataType, StructType, ByteType, \
-    StringType, BinaryType, BooleanType, FloatType, DoubleType, ShortType, IntegerType, DateType, TimestampType, \
-    TimestampNTZType, NullType, VariantType, CalendarIntervalType, MapType
+from pyspark.sql.types import (
+    Row,
+    DecimalType,
+    LongType,
+    StructField,
+    ArrayType,
+    DataType,
+    StructType,
+    ByteType,
+    StringType,
+    BooleanType,
+    DoubleType,
+    IntegerType,
+    MapType,
+)
 from decimal import Decimal
 import math
 
@@ -17,6 +29,7 @@ def _parse_record(schema: StructType, data: Dict) -> Row:
         output = _parse_field(field.dataType, data.get(field.name))
         row[field.name] = output
     return Row(**row)
+
 
 def _infer_schema(data: Dict[str, Any]) -> StructType:
     fields = []
@@ -45,7 +58,7 @@ def _infer_schema(data: Dict[str, Any]) -> StructType:
 def _parse_field(data_type: DataType, value):
     if isinstance(value, CBORSimpleValue):
         value = value.value
-    if isinstance(value, dict) and not data_type.typeName() in ["map","struct"]:
+    if isinstance(value, dict) and not data_type.typeName() in ["map", "struct"]:
         schema = _infer_schema(value)
         return _parse_record(schema, value)
     if isinstance(data_type, ArrayType):
@@ -62,6 +75,7 @@ def _parse_field(data_type: DataType, value):
         return _parse_boolean(value)
     return value
 
+
 def _parse_map(data_type: MapType, value: Dict) -> Dict:
     map_values = {}
     if isinstance(value, CBORTag):
@@ -72,9 +86,13 @@ def _parse_map(data_type: MapType, value: Dict) -> Dict:
             key = str(key)
 
         if isinstance(key, CBORTag):
-            map_values[_parse_field(data_type.keyType, key.tag)]  = _parse_field(data_type.valueType, key.value)
+            map_values[_parse_field(data_type.keyType, key.tag)] = _parse_field(
+                data_type.valueType, key.value
+            )
         else:
-            map_values[_parse_field(data_type.keyType, key)] = _parse_field(data_type.valueType, val)
+            map_values[_parse_field(data_type.keyType, key)] = _parse_field(
+                data_type.valueType, val
+            )
     return map_values
 
 
@@ -82,6 +100,7 @@ def _parse_boolean(value: Union[bool, undefined]) -> Optional[bool]:
     if value is undefined:
         return None
     return value
+
 
 def _parse_array(data_type: DataType, value: List) -> List:
     values = []
@@ -100,17 +119,20 @@ def _parse_array(data_type: DataType, value: List) -> List:
 
     return values
 
+
 def _parse_long(value: int) -> Optional[int]:
     long_limit = 9223372036854775807
     if abs(value) > long_limit:
         return None
     return value
 
+
 def _parse_integer(value: int) -> Optional[int]:
     integer_limit = 2147483647
     if abs(value) > integer_limit:
         return None
     return value
+
 
 def _parse_decimal(value: Union[Decimal, float]) -> Optional[Decimal]:
     # Handle special float values. nan, -inf and inf are not supported by DecimalType.
