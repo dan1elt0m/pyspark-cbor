@@ -1,6 +1,6 @@
 """Parsers for converting Python types from CBOR into PyArrow supported datatypes"""
 
-from typing import Union, Optional, List, Dict,  Any
+from typing import Union, Optional, List, Dict, Any, Type
 
 from _cbor2 import CBORSimpleValue, undefined, CBORTag
 from pyspark.sql.types import (
@@ -95,7 +95,7 @@ def _parse_map(data_type: MapType, value: Dict) -> Dict:
     return map_values
 
 
-def _parse_boolean(value: Union[bool, undefined]) -> Optional[bool]:
+def _parse_boolean(value: bool) -> Optional[bool]:
     if value is undefined:
         return None
     return value

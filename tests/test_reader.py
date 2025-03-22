@@ -26,7 +26,10 @@ from pyspark.sql.types import (
 )
 
 from pyspark_cbor import CBORDataSourceReader, CBORDataSource,  CBORInputPartition
+import os
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+EXAMPLE_FILE = os.path.join(current_dir, "examples.cbor.b64")
 
 @pytest.mark.parametrize(
     "field,datatype,expected",
@@ -70,8 +73,8 @@ from pyspark_cbor import CBORDataSourceReader, CBORDataSource,  CBORInputPartiti
 )
 def test_reader(field: str, datatype: DataType, expected: list):
     schema = StructType([StructField(field, datatype, True)])
-    reader = CBORDataSourceReader(schema, {"path": "examples.cbor.b64"})
-    data = list(reader.read(CBORInputPartition("examples.cbor.b64")))
+    reader = CBORDataSourceReader(schema, {"path": EXAMPLE_FILE})
+    data = list(reader.read(CBORInputPartition(EXAMPLE_FILE)))
     if datatype.typeName() == "array":
         assert data[0][0] == expected
     else:
@@ -182,7 +185,7 @@ def test_spark_reader_single_row(spark, field: str, datatype: DataType, expected
         spark.read.format("cbor")
         .schema(schema)
         .option("base64_encoded", True)
-        .load("examples.cbor.b64")
+        .load(EXAMPLE_FILE)
     )
     assert df.count() == 1
     assert df.schema.fields[0].name == field
