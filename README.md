@@ -149,12 +149,8 @@ Integers will be set to null if they exceed the maximum value of the correspondi
    - LongType: `9223372036854775807`
 
 - In DecimalType, the precision is limited to 38 digits. infinity and NaN are not supported and will be converted to `null`.
-- Not sure if I implemented the `CBOR TAGS` and other special types correctly. Might or might not work as expected. 
-
-- Let me know if you find any issues.
 
 ### TODOs
-- Add more tests
 - Add StreamReader 
 - Add Writer
 - Add StreamWriter
