@@ -21,7 +21,7 @@ from decimal import Decimal
 import math
 
 
-def _parse_record(schema: StructType, data: Dict) -> Row:
+def convert_to_struct(data: Dict, schema: Optional[StructType] = None) -> Row:
     # Each field is a dictionary with the field name as the key
     if not schema:
         schema = _infer_schema(data)
@@ -61,7 +61,7 @@ def _parse_field(data_type: DataType, value):
         value = value.value
     if isinstance(value, dict) and data_type.typeName() not in ["map", "struct"]:
         schema = _infer_schema(value)
-        return _parse_record(schema, value)
+        return convert_to_struct(value, schema)
     if isinstance(data_type, ArrayType):
         return _parse_array(data_type.elementType, value)
     if isinstance(data_type, MapType):
@@ -114,7 +114,7 @@ def _parse_array(data_type: DataType, value: List) -> List:
                 if isinstance(key, CBORSimpleValue):
                     values.append(key.value)
                 else:
-                    values.append(_parse_record(_infer_schema(i), i))
+                    values.append(convert_to_struct(i))
         else:
             values.append(_parse_field(data_type, i))
 

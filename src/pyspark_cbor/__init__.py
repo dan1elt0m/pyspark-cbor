@@ -128,7 +128,7 @@ class CBORDataSourceReader(DataSourceReader):
         """This method reads the data from the given InputPartition."""
         # Import here to serialize the modules into the workers
         import cbor2
-        from pyspark_cbor.parsers import _parse_array, _parse_record  # noqa: F401
+        from pyspark_cbor.parsers import _parse_array, convert_to_struct # noqa: F401
 
         file_name = partition.file_name
 
@@ -180,4 +180,4 @@ class CBORDataSourceReader(DataSourceReader):
                 raise ValueError(
                     f"Expected record to be a dict, but got {type(record).__name__}: {record}"
                 )
-            yield tuple(row for row in _parse_record(self.schema, record))
+            yield tuple(row for row in convert_to_struct(record, self.schema))
